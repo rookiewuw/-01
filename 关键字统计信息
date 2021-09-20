@@ -1,0 +1,132 @@
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+using namespace std;
+char test[100000];
+struct keylist{
+	const char *word;
+	int count;
+}key[]={
+	"auto", 0,
+	"break", 0,
+	"case", 0,
+	"char", 0,
+	"const", 0,
+	"continue", 0,
+	"default", 0,
+	"do", 0,
+	"double", 0,
+	"else", 0,
+	"enum", 0,
+	"extern", 0,
+	"float", 0,
+	"for", 0,
+	"goto" ,0,
+	"if", 0,
+	"int", 0,
+	"long", 0,
+	"register", 0,
+	"return", 0,
+	"short", 0,
+	"signed", 0,
+	"sizeof", 0,
+	"static", 0,
+	"struct", 0,
+	"switch", 0,
+	"typedef", 0,
+	"union", 0,
+	"unsigned", 0,
+	"void", 0,
+	"volatile", 0,
+	"while", 0,	
+	}; 
+int find (string word){
+  	int x=0;
+	for(int i = 0;i < 32; i++){
+		if(key[i].word == word){
+			key[i].count++;
+			x = i;
+			break;
+		}
+	}
+	return x;
+}
+void openfile(char file_name[500]){
+	FILE *fp;
+	char a;
+	string str;
+	int num;
+	fp=fopen(file_name,"r");
+	if(fp == NULL){
+		cout<< "file cannot open!"<<endl;
+	}
+	a = fgetc(fp);
+	while(a != EOF){
+		//cout<< a <<endl;
+		if(a == '#'){
+			while(a!='>'){
+				a = fgetc(fp);
+				if(a == '\n')break;
+			}	
+		}
+	    else if(isalpha(a) || isalnum(a)){
+	    	string temp;
+	    	while(isalpha(a) || isalnum(a)){
+	    		temp += a;
+	    		a=fgetc(fp);
+			}
+			num = find(temp);
+			/*if(num == 0){
+				cout <<"error"<<endl;
+			}
+			else
+			cout<< key[num].word<< key[num].count<<endl;*/
+		}
+		else if(a == '"'){
+			a= fgetc(fp);
+			while(a!='""'){
+				a=fgetc(fp);
+			}
+			a=fgetc(fp);
+		}
+		else if(a == '\''){
+			a= fgetc(fp);
+			while(a!='\''){
+				a=fgetc(fp);
+			}
+			a=fgetc(fp);
+		}
+		else if(a == '/'){
+			a= fgetc(fp);
+			if(a!='/'){
+				while(a!='\n')
+				a=fgetc(fp);
+			}
+			if(a == '*'){
+				while(a != '/')
+				a = fgetc(fp);
+			}
+		}
+		else {
+			a = fgetc(fp);
+		}
+		
+	}
+	fclose(fp);
+} 
+
+int main()
+{
+    char file_name[500];
+    int level;
+    scanf("%s",file_name);
+  //  cin >> level;
+    openfile(file_name);
+    int ans=0;
+    for(int i = 0;i < 32;i++){
+    	ans+=key[i].count;
+    	cout<<key[i].word<<key[i].count<<endl;
+	}
+	cout<<ans<<endl;
+    return 0;
+}
