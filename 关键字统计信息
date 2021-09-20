@@ -3,6 +3,7 @@
 #include <stdlib.h>
 using namespace std;
 char test[100000];
+int ca[5000];
 struct keylist{
 	const char *word;
 	int count;
@@ -62,7 +63,6 @@ void openfile(char file_name[500]){
 	}
 	a = fgetc(fp);
 	while(a != EOF){
-		//cout<< a <<endl;
 		if(a == '#'){
 			while(a!='>'){
 				a = fgetc(fp);
@@ -76,11 +76,10 @@ void openfile(char file_name[500]){
 	    		a=fgetc(fp);
 			}
 			num = find(temp);
-			/*if(num == 0){
-				cout <<"error"<<endl;
+			if(key[25].count != 0){
+				if(num == 2)
+				ca[key[25].count-1]++;
 			}
-			else
-			cout<< key[num].word<< key[num].count<<endl;*/
 		}
 		else if(a == '"'){
 			a= fgetc(fp);
@@ -120,13 +119,27 @@ int main()
     char file_name[500];
     int level;
     scanf("%s",file_name);
-  //  cin >> level;
+    cin >> level;
     openfile(file_name);
-    int ans=0;
+    if(level == 1){
+    	int ans=0;
     for(int i = 0;i < 32;i++){
+    	//cout<<key[i].word<<key[i].count<<endl;
     	ans+=key[i].count;
-    	cout<<key[i].word<<key[i].count<<endl;
 	}
-	cout<<ans<<endl;
+	cout<<"total num: "<<ans<<endl;
+	}
+	if(level == 2){
+		int ans=0;
+    	for(int i = 0;i < 32;i++){
+    		ans+=key[i].count;
+			}
+		cout<<"total num: "<<ans<<endl;
+		cout<<"switch num: "<<key[25].count<<endl;
+		cout<<"case num: ";
+		for(int i = 0;i<key[25].count;i++){
+			cout<<ca[i]<<" ";
+		}
+	}	
     return 0;
 }
