@@ -1,8 +1,9 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
+#include<stack> 
 using namespace std;
-char test[100000];
+stack <int> cnt;
 int ca[5000];
 struct keylist{
 	const char *word;
@@ -69,21 +70,9 @@ void openfile(char file_name[500]){
 				if(a == '\n')break;
 			}	
 		}
-	    else if(isalpha(a) || isalnum(a)){
-	    	string temp;
-	    	while(isalpha(a) || isalnum(a)){
-	    		temp += a;
-	    		a=fgetc(fp);
-			}
-			num = find(temp);
-			if(key[25].count != 0){
-				if(num == 2)
-				ca[key[25].count-1]++;
-			}
-		}
 		else if(a == '"'){
 			a= fgetc(fp);
-			while(a!='""'){
+			while(a!='"'){
 				a=fgetc(fp);
 			}
 			a=fgetc(fp);
@@ -106,6 +95,49 @@ void openfile(char file_name[500]){
 				a = fgetc(fp);
 			}
 		}
+	    else if(isalpha(a)){//判断单词 
+	    	string temp;
+	    	int ans1 = 0,ans2 = 0;
+	    	while(isalpha(a)){
+	    		temp += a;
+	    		a=fgetc(fp);
+			}
+			num = find(temp);
+			if(key[25].count != 0){
+				if(num == 2)
+				ca[key[25].count-1]++;
+			}//计算case 
+			if(num == 15){
+				cnt.push(1);
+			}
+			else if(num == 9){
+				while(a == ' '||a =='\n'){
+					a == fgetc(fp);
+				}
+				if(a=='i'){
+					if(fgetc(fp)=='f'){
+						if((cnt.empty() == false) &&(cnt.top()!=3)){
+							cnt.push(3);
+						}
+					}
+					else if(fgetc(fp)!='f'){
+						if((cnt.empty()==false )&&(cnt.top()==1)){
+							ans1++;
+							cnt.pop();
+						}
+						else if((cnt.empty()==false) && (cnt.top()==3)){
+							cnt.pop();
+							if((cnt.empty()==false)&&(cnt.top()==1)){
+								ans2++;
+								cnt.pop();
+							}
+						}
+					}
+					cout<<ans1<<ans2<<endl;
+				}
+			}
+		}
+	
 		else {
 			a = fgetc(fp);
 		}
